@@ -61,17 +61,17 @@ async function showStations(url) {
                 let date = feature.properties.date ? new Date(feature.properties.date).toLocaleString() : '--';
 
                 let popupContent = `
-            <div class="p-4 bg-white rounded-lg shadow-lg">
-                <h4 class="text-xl font-semibold mb-2">${name} <span class="text-sm text-gray-500">(${altitude}m)</span></h4>
-                <div class="text-gray-800">
-                    <p><i class="fas fa-thermometer-half"></i> Lufttemperatur: ${temp}°C</p>
-                    <p><i class="fas fa-tint"></i> Relative Luftfeuchte: ${humidity}%</p>
-                    <p><i class="fas fa-wind"></i> Windgeschwindigkeit: ${windSpeed} km/h</p>
-                    <p><i class="fas fa-snowflake"></i> Schneehöhe: ${snowHeight} cm</p>
-                    <p><i class="fas fa-calendar-alt"></i> ${date}</p>
-                </div>
-            </div>
-        `;
+                    <div class="p-4 bg-white rounded-lg shadow-lg">
+                        <h4 class="text-xl font-semibold mb-2">${name} <span class="text-sm text-gray-500">(${altitude}m)</span></h4>
+                        <div class="text-gray-800">
+                            <p><i class="fas fa-thermometer-half"></i> Lufttemperatur: ${temp}°C</p>
+                            <p><i class="fas fa-tint"></i> Relative Luftfeuchte: ${humidity}%</p>
+                            <p><i class="fas fa-wind"></i> Windgeschwindigkeit: ${windSpeed} km/h</p>
+                            <p><i class="fas fa-snowflake"></i> Schneehöhe: ${snowHeight} cm</p>
+                            <p><i class="fas fa-calendar-alt"></i> ${date}</p>
+                        </div>
+                    </div>
+                `;
                 layer.bindPopup(popupContent);
             }
         }
