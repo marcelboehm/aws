@@ -1,5 +1,6 @@
 /* Wetterstationen Euregio Beispiel */
 
+
 // Innsbruck
 let ibk = {
     lat: 47.267222,
@@ -13,7 +14,10 @@ let map = L.map("map", {
 
 // thematische Layer
 let themaLayer = {
-    stations: L.featureGroup().addTo(map)
+    stations: L.featureGroup().addTo(map),
+    temperature: L.featureGroup().addTo(map),
+    snow: L.featureGroup().addTo(map),
+    wind: L.featureGroup().addTo(map)
 }
 
 // Hintergrundlayer
@@ -26,13 +30,81 @@ L.control.layers({
     "Esri WorldTopoMap": L.tileLayer.provider("Esri.WorldTopoMap"),
     "Esri WorldImagery": L.tileLayer.provider("Esri.WorldImagery")
 }, {
-    "Wetterstationen": themaLayer.stations
+    "Wetterstationen": themaLayer.stations,
+    "Temperatur": themaLayer.temperature,
+    "Schneehöhe": themaLayer.snow,
+    "Wind": themaLayer.wind
 }).addTo(map);
 
 // Maßstab
 L.control.scale({
     imperial: false,
 }).addTo(map);
+
+function getColor(value, ramp) {
+    for (let rule of ramp) {
+        if (value >= rule.min && value < rule.max) {
+            return rule.color;
+        }
+    }
+}
+
+function showTemperature(geoJSON) {
+    L.geoJSON(geoJSON, {
+        filter: function (feature) {
+            if (feature.properties.LT > -50 && feature.properties.LT < 50) {
+                return true;
+            }
+
+        },
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    html: `<span style="background-color: ${getColor(feature.properties.LT, COLORS.temperature)}">${feature.properties.LT.toFixed(0)}°C</span>`,
+                    className: "aws-div-icon",
+                })
+            });
+        }
+    }).addTo(themaLayer.temperature);
+}
+
+function showWind(geoJSON) {
+    L.geoJSON(geoJSON, {
+        filter: function (feature) {
+            if (feature.properties.WG > 0 && feature.properties.WG < 3000) {
+                return true;
+            }
+
+        },
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    html: `<span style="background-color: ${getColor(feature.properties.WG, COLORS.wind)}">${feature.properties.WG.toFixed(0)}kmh</span>`,
+                    className: "aws-div-icon",
+                })
+            });
+        }
+    }).addTo(themaLayer.wind);
+}
+
+function showSnow(geoJSON) {
+    L.geoJSON(geoJSON, {
+        filter: function (feature) {
+            if (feature.properties.HS > 0 && feature.properties.HS < 10000) {
+                return true;
+            }
+
+        },
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    html: `<span style="background-color: ${getColor(feature.properties.HS, COLORS.snow)}">${feature.properties.HS.toFixed(0)}mm</span>`,
+                    className: "aws-div-icon",
+                })
+            });
+        }
+    }).addTo(themaLayer.snow);
+}
 
 // GeoJSON der Wetterstationen laden
 async function showStations(url) {
@@ -75,7 +147,10 @@ async function showStations(url) {
                 layer.bindPopup(popupContent);
             }
         }
-    }).addTo(map);
+    }).addTo(themaLayer.stations);
+    showTemperature(geojson);
+    showSnow(geojson);
+    showWind(geojson);
 }
 
 showStations("https://static.avalanche.report/weather_stations/stations.geojson");
