@@ -79,8 +79,8 @@ function showWind(geoJSON) {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
                 icon: L.divIcon({
-                    html: `<span style="background-color: ${getColor(feature.properties.WG, COLORS.wind)}">${feature.properties.WG.toFixed(0)}kmh</span>`,
-                    className: "aws-div-icon",
+                    html: `<span title="${feature.properties.WG.toFixed(1)} km/h"><i style="transform:rotate(${feature.properties.WR}deg); color:${getColor(feature.properties.WG, COLORS.wind)}" class="fa-solid fa-circle-arrow-down"></i></span>`,
+                    className: "aws-div-icon-wind",
                 })
             });
         }

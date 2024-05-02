@@ -61,3 +61,12 @@ footer nav {
     display: inline-block;
     transform: translate(-30%, -50%);
 }
+
+.aws-div-icon-wind span {
+    font-size: 2.5em;
+    padding: 0.3em;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    display: inline-block;
+    transform: translate(-30%, -50%);
+}
