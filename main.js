@@ -12,6 +12,17 @@ let map = L.map("map", {
     fullscreenControl: true
 }).setView([ibk.lat, ibk.lng], 11);
 
+L.control.rainviewer({
+    position: 'bottomleft',
+    nextButtonText: '>',
+    playStopButtonText: 'Play/Stop',
+    prevButtonText: '<',
+    positionSliderLabelText: "Hour:",
+    opacitySliderLabelText: "Opacity:",
+    animationInterval: 500,
+    opacity: 0.5
+}).addTo(map);
+
 // thematische Layer
 let themaLayer = {
     stations: L.featureGroup().addTo(map),
